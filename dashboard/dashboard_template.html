@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <title>Armenia Powerlifting: Regional Workload &amp; Forecast</title>
 <style>
   .viz-root {
@@ -190,6 +196,7 @@
     border-bottom: 1px solid var(--grid);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
+    color: var(--text-primary);
   }
   table.data-table th { color: var(--text-muted); font-weight: 500; }
   .table-scroll { overflow-x: auto; }
@@ -216,6 +223,8 @@
 
   footer { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 32px; }
 </style>
+</head>
+<body>
 
 <div class="viz-root">
   <div class="wrap">
@@ -282,6 +291,15 @@ function showTooltip(x, y, html) {
 }
 function hideTooltip() { tooltip.style.opacity = 0; }
 
+const FALLBACK_COLORS = {
+  '--series-blue': '#2a78d6', '--series-aqua': '#1baf7a', '--series-yellow': '#eda100',
+  '--series-green': '#008300', '--series-muted': '#898781',
+};
+function resolveCssVar(name) {
+  const val = getComputedStyle(document.querySelector('.viz-root')).getPropertyValue(name).trim();
+  return val || FALLBACK_COLORS[name] || '#000000';
+}
+
 // ---------- KPI row ----------
 function renderKPIs() {
   const wl = DATA.workload;
@@ -316,7 +334,7 @@ function renderBarChart() {
   const maxVal = Math.max(...entries.map(e => e[1]));
   const scaleW = width - leftPad - rightPad;
 
-  const barColor = getComputedStyle(document.querySelector('.viz-root')).getPropertyValue('--series-blue').trim() || '#2a78d6';
+  const barColor = resolveCssVar('--series-blue');
 
   let svg = `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Competition entries by region">`;
   entries.forEach(([region, val], i) => {
@@ -392,8 +410,9 @@ function renderLineChart() {
   AGE_GROUPS.forEach(ag => {
     const grp = rows.filter(r => r.AgeGroup === ag).sort((a, b) => a.Year - b.Year);
     if (grp.length === 0) return;
-    const color = 'var(--' + (ag === 'Youth (<=17)' ? 'series-blue' : ag === 'Junior (18-23)' ? 'series-aqua' :
-                  ag === 'Open (24-39)' ? 'series-yellow' : ag === 'Masters (40+)' ? 'series-green' : 'series-muted') + ')';
+    const varName = ag === 'Youth (<=17)' ? '--series-blue' : ag === 'Junior (18-23)' ? '--series-aqua' :
+                  ag === 'Open (24-39)' ? '--series-yellow' : ag === 'Masters (40+)' ? '--series-green' : '--series-muted';
+    const color = resolveCssVar(varName);
     const isSynthetic = grp.some(r => r.IsSyntheticForecast);
     legendGroups.push({ ag, color, isSynthetic });
 
@@ -480,3 +499,6 @@ renderLineChart();
 renderWorkloadTable();
 renderForecastTable();
 </script>
+
+</body>
+</html>
