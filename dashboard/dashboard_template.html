@@ -1,0 +1,482 @@
+<title>Armenia Powerlifting: Regional Workload &amp; Forecast</title>
+<style>
+  .viz-root {
+    --surface-1:      #fcfcfb;
+    --page:           #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --grid:           #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --series-blue:    #2a78d6;
+    --series-aqua:    #1baf7a;
+    --series-yellow:  #eda100;
+    --series-green:   #008300;
+    --series-muted:   #898781;
+    --seq-blue-400:   #3987e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    .viz-root {
+      --surface-1:      #1a1a19;
+      --page:           #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --grid:           #2c2c2a;
+      --baseline:       #383835;
+      --border:         rgba(255,255,255,0.10);
+      --series-blue:    #3987e5;
+      --series-aqua:    #199e70;
+      --series-yellow:  #c98500;
+      --series-green:   #008300;
+      --series-muted:   #898781;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    --surface-1:      #1a1a19;
+    --page:           #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --grid:           #2c2c2a;
+    --baseline:       #383835;
+    --border:         rgba(255,255,255,0.10);
+    --series-blue:    #3987e5;
+    --series-aqua:    #199e70;
+    --series-yellow:  #c98500;
+    --series-green:   #008300;
+  }
+  :root[data-theme="light"] .viz-root {
+    --surface-1:      #fcfcfb;
+    --page:           #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --grid:           #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --series-blue:    #2a78d6;
+    --series-aqua:    #1baf7a;
+    --series-yellow:  #eda100;
+    --series-green:   #008300;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .viz-root {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 24px 20px 64px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .subtitle { color: var(--text-secondary); font-size: 14px; margin: 0 0 18px; }
+
+  .banner {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--series-yellow);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+  .banner b { color: var(--text-primary); }
+
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .kpi {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .kpi .value {
+    font-size: 24px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .kpi .label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .panel {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .panel-title { font-size: 15px; font-weight: 600; }
+  .panel-note { font-size: 12px; color: var(--text-muted); }
+
+  .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+  select {
+    font: inherit;
+    font-size: 13px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--page);
+    color: var(--text-primary);
+  }
+  .toggle-btn {
+    font: inherit;
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .toggle-btn:hover { color: var(--text-primary); }
+
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .axis-label { fill: var(--text-muted); font-size: 11px; }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .baseline { stroke: var(--baseline); stroke-width: 1; }
+  .bar-label { fill: var(--text-secondary); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .region-label { fill: var(--text-primary); font-size: 12px; }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--text-secondary); margin-top: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex: none; }
+
+  .tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    opacity: 0;
+    transition: opacity 0.1s;
+    white-space: nowrap;
+    z-index: 10;
+    color: var(--text-primary);
+  }
+  .tooltip .t-row { display: flex; align-items: center; gap: 6px; }
+  .tooltip .t-swatch { width: 8px; height: 8px; border-radius: 2px; }
+  .chart-container { position: relative; }
+
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 12px;
+  }
+  table.data-table th, table.data-table td {
+    text-align: left;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--grid);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  table.data-table th { color: var(--text-muted); font-weight: 500; }
+  .table-scroll { overflow-x: auto; }
+  .hidden { display: none; }
+
+  .synthetic-pill {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: #7a5a00;
+    background: rgba(237,161,0,0.18);
+    border: 1px solid rgba(237,161,0,0.35);
+    border-radius: 999px;
+    padding: 2px 8px;
+    margin-left: 6px;
+  }
+  :root[data-theme="dark"] .synthetic-pill { color: #ffd88a; }
+  @media (prefers-color-scheme: dark) {
+    .synthetic-pill { color: #ffd88a; }
+  }
+  :root[data-theme="light"] .synthetic-pill { color: #7a5a00; }
+
+  footer { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 32px; }
+</style>
+
+<div class="viz-root">
+  <div class="wrap">
+    <h1>Armenia Powerlifting — Regional Workload &amp; 5-Year Forecast</h1>
+    <p class="subtitle">Source: OpenPowerlifting dataset, filtered to Country = Armenia (642 real competition entries)</p>
+
+    <div class="banner">
+      <b>Region labels are synthetic.</b> No real Armenian regional data exists in the source
+      dataset — Armenian athletes only competed abroad, so <code>MeetState</code> reflects
+      foreign meet locations, not Armenian marzes. Every region below was assigned via a
+      deterministic hash of athlete name across Armenia's 11 real marzes, purely to demonstrate
+      the analysis pipeline. Lift totals, ages, and dates are real; region and any chart/series
+      marked <span class="synthetic-pill">synthetic</span> are not.
+    </div>
+
+    <div class="kpi-row" id="kpiRow"></div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Current workload by region</div>
+          <div class="panel-note">Total competition entries, summed across all age groups (synthetic region assignment)</div>
+        </div>
+        <button class="toggle-btn" data-table-toggle="workloadTable">Show table</button>
+      </div>
+      <div class="chart-container" id="barChartContainer"></div>
+      <div class="table-scroll hidden" id="workloadTable"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Max TotalKg: history + 5-year forecast</div>
+          <div class="panel-note">Solid = historical, dashed = forecast. Dotted background shading marks fully synthetic series.</div>
+        </div>
+        <button class="toggle-btn" data-table-toggle="forecastTable">Show table</button>
+      </div>
+      <div class="controls">
+        <label for="regionSelect" style="font-size:12px;color:var(--text-secondary);">Region</label>
+        <select id="regionSelect"></select>
+      </div>
+      <div class="chart-container" id="lineChartContainer"></div>
+      <div class="legend" id="lineLegend"></div>
+      <div class="table-scroll hidden" id="forecastTable"></div>
+    </div>
+
+    <footer>Generated from armenia_powerlifting_analysis.ipynb — synthetic data clearly flagged throughout.</footer>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+const DATA = /*__DATA_JSON__*/;
+
+const AGE_GROUPS = ["Youth (<=17)", "Junior (18-23)", "Open (24-39)", "Masters (40+)", "Unknown"];
+
+const tooltip = document.getElementById('tooltip');
+function showTooltip(x, y, html) {
+  tooltip.innerHTML = html;
+  tooltip.style.left = (x + 16) + 'px';
+  tooltip.style.top = (y + 16) + 'px';
+  tooltip.style.opacity = 1;
+}
+function hideTooltip() { tooltip.style.opacity = 0; }
+
+// ---------- KPI row ----------
+function renderKPIs() {
+  const wl = DATA.workload;
+  const totalEntries = wl.reduce((s, r) => s + r.CompetitionEntries, 0);
+  const totalAthletes = wl.reduce((s, r) => s + r.AthleteCount, 0);
+  const regions = new Set(wl.map(r => r.Region)).size;
+  const totalCells = new Set(DATA.forecast.map(r => r.Region + '|' + r.AgeGroup)).size;
+  const synthGroupCount = new Set(DATA.forecast.filter(r => r.IsSyntheticForecast).map(r => r.Region + '|' + r.AgeGroup)).size;
+
+  const kpis = [
+    { value: totalAthletes.toLocaleString(), label: 'Athletes (real data)' },
+    { value: totalEntries.toLocaleString(), label: 'Competition entries' },
+    { value: regions, label: 'Regions (synthetic)' },
+    { value: `${synthGroupCount} / ${totalCells}`, label: 'Groups using synthetic forecast' },
+  ];
+  const row = document.getElementById('kpiRow');
+  row.innerHTML = kpis.map(k => `
+    <div class="kpi">
+      <div class="value">${k.value}</div>
+      <div class="label">${k.label}</div>
+    </div>`).join('');
+}
+
+// ---------- Bar chart: workload by region ----------
+function renderBarChart() {
+  const totals = {};
+  DATA.workload.forEach(r => { totals[r.Region] = (totals[r.Region] || 0) + r.CompetitionEntries; });
+  const entries = Object.entries(totals).sort((a, b) => b[1] - a[1]);
+
+  const width = 900, barH = 28, gap = 10, leftPad = 130, rightPad = 50, topPad = 10;
+  const height = entries.length * (barH + gap) + topPad;
+  const maxVal = Math.max(...entries.map(e => e[1]));
+  const scaleW = width - leftPad - rightPad;
+
+  const barColor = getComputedStyle(document.querySelector('.viz-root')).getPropertyValue('--series-blue').trim() || '#2a78d6';
+
+  let svg = `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Competition entries by region">`;
+  entries.forEach(([region, val], i) => {
+    const y = topPad + i * (barH + gap);
+    const w = (val / maxVal) * scaleW;
+    svg += `<text x="${leftPad - 10}" y="${y + barH/2 + 4}" text-anchor="end" class="region-label">${region}</text>`;
+    svg += `<rect x="${leftPad}" y="${y}" width="${scaleW}" height="${barH}" fill="var(--grid)" rx="4"></rect>`;
+    svg += `<rect data-region="${region}" data-val="${val}" x="${leftPad}" y="${y}" width="${w}" height="${barH}" fill="${barColor}" rx="4" style="cursor:pointer;"></rect>`;
+    svg += `<text x="${leftPad + w + 8}" y="${y + barH/2 + 4}" class="bar-label">${val}</text>`;
+  });
+  svg += `<line x1="${leftPad}" y1="${topPad}" x2="${leftPad}" y2="${height}" class="baseline"></line>`;
+  svg += `</svg>`;
+
+  const container = document.getElementById('barChartContainer');
+  container.innerHTML = svg;
+
+  container.querySelectorAll('rect[data-region]').forEach(rect => {
+    rect.addEventListener('mousemove', (e) => {
+      const region = rect.getAttribute('data-region');
+      const val = rect.getAttribute('data-val');
+      const rows = DATA.workload.filter(r => r.Region === region);
+      const athletes = rows.reduce((s, r) => s + r.AthleteCount, 0);
+      showTooltip(e.pageX, e.pageY, `<b>${region}</b><br>${val} competition entries<br>${athletes} athletes`);
+    });
+    rect.addEventListener('mouseleave', hideTooltip);
+  });
+}
+
+// ---------- Line chart: forecast trend ----------
+let currentRegion = null;
+
+function populateRegionSelect() {
+  const totals = {};
+  DATA.workload.forEach(r => { totals[r.Region] = (totals[r.Region] || 0) + r.CompetitionEntries; });
+  const regions = Object.keys(totals).sort((a, b) => totals[b] - totals[a]);
+  const sel = document.getElementById('regionSelect');
+  sel.innerHTML = regions.map(r => `<option value="${r}">${r}</option>`).join('');
+  currentRegion = regions[0];
+  sel.value = currentRegion;
+  sel.addEventListener('change', () => { currentRegion = sel.value; renderLineChart(); renderForecastTable(); });
+}
+
+function renderLineChart() {
+  const width = 900, height = 380;
+  const padL = 50, padR = 20, padT = 20, padB = 36;
+  const plotW = width - padL - padR, plotH = height - padT - padB;
+
+  const rows = DATA.forecast.filter(r => r.Region === currentRegion);
+  const years = [...new Set(rows.map(r => r.Year))].sort((a, b) => a - b);
+  const vals = rows.map(r => r.MaxTotalKg).filter(v => v !== null);
+  const minY = 0, maxY = Math.max(...vals) * 1.1;
+
+  const xScale = (year) => padL + ((year - years[0]) / (years[years.length - 1] - years[0] || 1)) * plotW;
+  const yScale = (val) => padT + plotH - ((val - minY) / (maxY - minY)) * plotH;
+
+  let svg = `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Forecast trend for ${currentRegion}">`;
+
+  const ticks = 5;
+  for (let i = 0; i <= ticks; i++) {
+    const val = minY + (maxY - minY) * (i / ticks);
+    const y = yScale(val);
+    svg += `<line x1="${padL}" y1="${y}" x2="${width - padR}" y2="${y}" class="gridline"></line>`;
+    svg += `<text x="${padL - 8}" y="${y + 4}" text-anchor="end" class="axis-label">${Math.round(val)}</text>`;
+  }
+  const yearTickStep = Math.max(1, Math.ceil(years.length / 10));
+  years.forEach((y, i) => {
+    if (i % yearTickStep === 0) {
+      svg += `<text x="${xScale(y)}" y="${height - padB + 18}" text-anchor="middle" class="axis-label">${y}</text>`;
+    }
+  });
+
+  let legendGroups = [];
+  AGE_GROUPS.forEach(ag => {
+    const grp = rows.filter(r => r.AgeGroup === ag).sort((a, b) => a.Year - b.Year);
+    if (grp.length === 0) return;
+    const color = 'var(--' + (ag === 'Youth (<=17)' ? 'series-blue' : ag === 'Junior (18-23)' ? 'series-aqua' :
+                  ag === 'Open (24-39)' ? 'series-yellow' : ag === 'Masters (40+)' ? 'series-green' : 'series-muted') + ')';
+    const isSynthetic = grp.some(r => r.IsSyntheticForecast);
+    legendGroups.push({ ag, color, isSynthetic });
+
+    const hist = grp.filter(r => r.Kind !== 'forecast');
+    const fcst = grp.filter(r => r.Kind === 'forecast');
+
+    if (hist.length > 0) {
+      const pts = hist.map(r => `${xScale(r.Year)},${yScale(r.MaxTotalKg)}`).join(' ');
+      svg += `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2"></polyline>`;
+      hist.forEach(r => {
+        svg += `<circle data-ag="${ag}" data-year="${r.Year}" data-val="${r.MaxTotalKg}" data-kind="${r.Kind}" cx="${xScale(r.Year)}" cy="${yScale(r.MaxTotalKg)}" r="4" fill="${color}" style="cursor:pointer;"></circle>`;
+      });
+    }
+    if (fcst.length > 0) {
+      const bridge = hist.length > 0 ? [hist[hist.length - 1], ...fcst] : fcst;
+      const pts = bridge.map(r => `${xScale(r.Year)},${yScale(r.MaxTotalKg)}`).join(' ');
+      svg += `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-dasharray="5,4" opacity="0.85"></polyline>`;
+      fcst.forEach(r => {
+        svg += `<circle data-ag="${ag}" data-year="${r.Year}" data-val="${r.MaxTotalKg}" data-kind="${r.Kind}" cx="${xScale(r.Year)}" cy="${yScale(r.MaxTotalKg)}" r="4" fill="${color}" opacity="0.85" style="cursor:pointer;"></circle>`;
+      });
+    }
+  });
+
+  svg += `<line x1="${padL}" y1="${padT + plotH}" x2="${width - padR}" y2="${padT + plotH}" class="baseline"></line>`;
+  svg += `</svg>`;
+
+  const container = document.getElementById('lineChartContainer');
+  container.innerHTML = svg;
+
+  container.querySelectorAll('circle').forEach(c => {
+    c.addEventListener('mousemove', (e) => {
+      const ag = c.getAttribute('data-ag');
+      const year = c.getAttribute('data-year');
+      const val = c.getAttribute('data-val');
+      const kind = c.getAttribute('data-kind');
+      const kindLabel = kind === 'forecast' ? 'Forecast' : kind === 'synthetic_historical' ? 'Synthetic history' : 'Historical';
+      showTooltip(e.pageX, e.pageY, `<b>${ag}</b><br>${year}: ${val} kg<br><span style="color:var(--text-muted)">${kindLabel}</span>`);
+    });
+    c.addEventListener('mouseleave', hideTooltip);
+  });
+
+  const legendEl = document.getElementById('lineLegend');
+  legendEl.innerHTML = legendGroups.map(g => `
+    <div class="legend-item">
+      <span class="legend-swatch" style="background:${g.color}"></span>
+      ${g.ag}${g.isSynthetic ? '<span class="synthetic-pill">synthetic</span>' : ''}
+    </div>`).join('');
+}
+
+// ---------- Data tables ----------
+function renderWorkloadTable() {
+  const cols = ["Region", "AgeGroup", "AthleteCount", "CompetitionEntries", "AvgEntriesPerAthlete", "AvgTotalKg", "MaxTotalKg", "YearsActive"];
+  let html = `<table class="data-table"><thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>`;
+  DATA.workload.forEach(r => {
+    html += `<tr>${cols.map(c => `<td>${r[c] ?? '—'}</td>`).join('')}</tr>`;
+  });
+  html += `</tbody></table>`;
+  document.getElementById('workloadTable').innerHTML = html;
+}
+
+function renderForecastTable() {
+  const rows = DATA.forecast.filter(r => r.Region === currentRegion);
+  const cols = ["Region", "AgeGroup", "Year", "MaxTotalKg", "Kind"];
+  let html = `<table class="data-table"><thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>`;
+  rows.forEach(r => {
+    html += `<tr>${cols.map(c => `<td>${r[c] ?? '—'}</td>`).join('')}</tr>`;
+  });
+  html += `</tbody></table>`;
+  document.getElementById('forecastTable').innerHTML = html;
+}
+
+document.querySelectorAll('[data-table-toggle]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = document.getElementById(btn.getAttribute('data-table-toggle'));
+    target.classList.toggle('hidden');
+    btn.textContent = target.classList.contains('hidden') ? 'Show table' : 'Hide table';
+  });
+});
+
+renderKPIs();
+renderBarChart();
+populateRegionSelect();
+renderLineChart();
+renderWorkloadTable();
+renderForecastTable();
+</script>

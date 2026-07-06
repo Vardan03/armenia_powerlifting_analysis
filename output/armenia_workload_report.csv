@@ -1,0 +1,51 @@
+Region,AgeGroup,AthleteCount,CompetitionEntries,AvgEntriesPerAthlete,AvgTotalKg,MaxTotalKg,YearsActive,RegionIsSynthetic
+Aragatsotn,Junior (18-23),3,7,2.33,163.6,290.0,4,True
+Aragatsotn,Open (24-39),6,22,3.67,303.4,652.5,7,True
+Aragatsotn,Youth (<=17),6,8,1.33,177.5,310.0,4,True
+Ararat,Junior (18-23),4,8,2.0,182.8,642.5,5,True
+Ararat,Masters (40+),2,5,2.5,495.5,590.0,3,True
+Ararat,Open (24-39),9,24,2.67,351.6,747.5,8,True
+Ararat,Unknown,1,1,1.0,,,1,True
+Ararat,Youth (<=17),5,7,1.4,147.1,205.0,4,True
+Armavir,Junior (18-23),6,16,2.67,349.4,730.0,7,True
+Armavir,Masters (40+),2,28,14.0,210.2,415.0,8,True
+Armavir,Open (24-39),12,32,2.67,340.8,800.0,7,True
+Armavir,Youth (<=17),10,24,2.4,287.8,615.0,4,True
+Gegharkunik,Junior (18-23),5,9,1.8,293.6,795.0,5,True
+Gegharkunik,Masters (40+),4,15,3.75,203.8,710.0,5,True
+Gegharkunik,Open (24-39),7,16,2.29,224.1,465.0,5,True
+Gegharkunik,Unknown,1,1,1.0,,,1,True
+Gegharkunik,Youth (<=17),15,32,2.13,208.9,485.0,5,True
+Kotayk,Junior (18-23),4,5,1.25,325.0,600.0,4,True
+Kotayk,Masters (40+),3,5,1.67,221.1,600.0,4,True
+Kotayk,Open (24-39),11,36,3.27,314.7,635.0,10,True
+Kotayk,Unknown,3,3,1.0,330.0,500.0,2,True
+Kotayk,Youth (<=17),7,14,2.0,149.3,292.5,2,True
+Lori,Junior (18-23),2,2,1.0,345.5,631.0,2,True
+Lori,Masters (40+),4,5,1.25,538.1,620.0,4,True
+Lori,Open (24-39),8,25,3.12,234.6,742.5,9,True
+Lori,Unknown,2,3,1.5,143.3,190.0,2,True
+Lori,Youth (<=17),8,15,1.88,225.7,400.0,4,True
+Shirak,Junior (18-23),5,11,2.2,225.0,605.0,4,True
+Shirak,Masters (40+),2,4,2.0,191.9,220.0,2,True
+Shirak,Open (24-39),6,14,2.33,390.5,607.5,3,True
+Shirak,Youth (<=17),6,13,2.17,121.0,355.0,3,True
+Syunik,Junior (18-23),4,4,1.0,388.3,595.0,2,True
+Syunik,Masters (40+),3,11,3.67,337.9,645.0,2,True
+Syunik,Open (24-39),8,23,2.88,316.2,650.0,7,True
+Syunik,Youth (<=17),6,7,1.17,185.7,585.0,4,True
+Tavush,Junior (18-23),5,10,2.0,226.5,735.0,5,True
+Tavush,Masters (40+),5,10,2.0,407.2,687.5,3,True
+Tavush,Open (24-39),11,27,2.45,286.8,710.0,9,True
+Tavush,Unknown,2,2,1.0,380.0,622.5,2,True
+Tavush,Youth (<=17),4,9,2.25,92.8,182.5,4,True
+Vayots Dzor,Junior (18-23),5,9,1.8,434.4,630.0,4,True
+Vayots Dzor,Masters (40+),2,10,5.0,517.6,690.0,5,True
+Vayots Dzor,Open (24-39),10,33,3.3,310.2,765.0,11,True
+Vayots Dzor,Unknown,1,1,1.0,130.0,130.0,1,True
+Vayots Dzor,Youth (<=17),8,9,1.12,151.9,450.0,6,True
+Yerevan,Junior (18-23),5,8,1.6,428.1,730.0,6,True
+Yerevan,Masters (40+),5,10,2.0,361.6,642.5,5,True
+Yerevan,Open (24-39),10,22,2.2,313.7,740.0,7,True
+Yerevan,Unknown,2,2,1.0,285.0,430.0,2,True
+Yerevan,Youth (<=17),9,25,2.78,221.6,397.5,3,True
